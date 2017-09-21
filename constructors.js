@@ -54,8 +54,12 @@ function Spell(name, cost, description) {
  * @property {string} description
  */
 
- DamageSpell.prototype = Object.create(Spell.prototype);
- DamageSpell.prototype.constructor = DamageSpell;
+ DamageSpell.prototype = Object.create(Spell.prototype, {
+  constructor : DamageSpell
+ });
+ // DamageSpell.prototype.constructor = DamageSpell;
+
+
 
  function DamageSpell(name, cost, damage, description) {
    Spell.call(this, name, cost, description);
@@ -151,28 +155,41 @@ function Spell(name, cost, description) {
    * @return {boolean}                    Whether the spell was successfully cast.
    */
 
-   this.invoke = function(spell, target) {
-      // var mana = spell.mana;
-      // var damage = spell.damage;
-      // var health = target.health;
 
-      if (!(spell instanceof Spell) && !(target instanceof Spellcaster)) {
-         return false;
-      } else {
-         if (spell.cost > this.mana) {
-            return false;
-         } else {
-            if (target === null) {
-               return false;
-            } else if (spell instanceof DamageSpell) {
-               this.spendMana(spell.cost);
-               if (target !== undefined) target.inflictDamage(spell.damage);
-               else return false;
-            } else {
-               this.spendMana(spell.cost);
-            }
-         return true;
-         }
-      }
-   };
+// checks if spell is valid and caster has enough mana
+// checks if there is a defined target
+// checks if the spell is a DamageSpell
+// spends mana cost of spell
+// checks if there is a target
+// if there is, damage target
+// spends mana if spell is valid but not a DamageSpell (no dmg inflicted)
+// returns false if target is null
+// returns true is spell is valid and caster has enough mana
+// returns false if spell is invalid or caster does not have enough mana
+
+
+  this.invoke = function(spell, target) {
+    if (!(spell instanceof Spell) ||
+          spell.cost > this.mana) return false;
+
+    if (spell instanceof DamageSpell) {
+      if (target && target instanceof Spellcaster) {
+        target.inflictDamage(spell.damage);
+        return this.spendMana(spell.cost);
+      } 
+      return false;
+    }
+    return this.spendMana(spell.cost);
+  };
 }
+    // if (spell instanceof Spell && spell.cost <= this.mana) {
+    //   if (target !== null) {
+    //     if (spell instanceof DamageSpell) {
+    //       if (target instanceof Spellcaster) {
+    //         this.spendMana(spell.cost); 
+    //         target.inflictDamage(spell.damage);
+    //       } else return false;
+    //     } else this.spendMana(spell.cost);
+    //   } else return false;
+    //   return true;
+    // } else return false;
