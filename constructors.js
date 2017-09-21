@@ -79,6 +79,12 @@ function Spell(name, cost, description) {
  * @method  invoke
  */
 
+ function Spellcaster(name, health, mana) {
+   this.name = name;
+   this.health = health;
+   this.mana = mana;
+   this.isAlive = true;
+
   /**
    * @method inflictDamage
    *
@@ -126,3 +132,5 @@ function Spell(name, cost, description) {
    * @param  {Spellcaster} target         The spell target to be inflicted.
    * @return {boolean}                    Whether the spell was successfully cast.
    */
+
+}
