@@ -162,10 +162,14 @@ function Spell(name, cost, description) {
          if (spell.cost > this.mana) {
             return false;
          } else {
-            this.spendMana(spell.mana);
-            if (spell instanceof DamageSpell) {
-               target.health -= spell.damage;
-               this.inflictDamage(spell.damage);
+            if (target === null) {
+               return false;
+            } else if (spell instanceof DamageSpell) {
+               this.spendMana(spell.cost);
+               if (target !== undefined) target.inflictDamage(spell.damage);
+               else return false;
+            } else {
+               this.spendMana(spell.cost);
             }
          return true;
          }
