@@ -96,6 +96,15 @@ function Spell(name, cost, description) {
    * @param  {number} damage  Amount of damage to deal to the spellcaster
    */
 
+   this.inflictDamage = function(damage){
+      if (this.health - damage <= 0) {
+         this.health = 0;
+         this.isAlive = false;
+      } else {
+         this.health = this.health - damage;
+      }
+   }
+
   /**
    * @method spendMana
    *
