@@ -101,9 +101,9 @@ function Spell(name, cost, description) {
          this.health = 0;
          this.isAlive = false;
       } else {
-         this.health = this.health - damage;
+         this.health -= damage;
       }
-   }
+   };
 
   /**
    * @method spendMana
@@ -114,6 +114,15 @@ function Spell(name, cost, description) {
    * @param  {number} cost      The amount of mana to spend.
    * @return {boolean} success  Whether mana was successfully spent.
    */
+
+   this.spendMana = function(cost) {
+      if (this.mana - cost < 0) {
+         return false;
+      } else {
+         this.mana -= cost;
+         return true;
+      }
+   };
 
   /**
    * @method invoke
