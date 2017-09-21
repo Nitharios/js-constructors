@@ -116,7 +116,7 @@ function Spell(name, cost, description) {
    */
 
    this.spendMana = function(cost) {
-      if (this.mana - cost < 0) {
+      if (this.mana < cost) {
          return false;
       } else {
          this.mana -= cost;
@@ -152,15 +152,22 @@ function Spell(name, cost, description) {
    */
 
    this.invoke = function(spell, target) {
-      if (!(spell instanceof Spell) || !(target instanceof Spellcaster)) {
+      // var mana = spell.mana;
+      // var damage = spell.damage;
+      // var health = target.health;
+
+      if (!(spell instanceof Spell) && !(target instanceof Spellcaster)) {
          return false;
       } else {
-         if (target.mana < spell.mana) return false;
-         else {
+         if (spell.cost > this.mana) {
+            return false;
+         } else {
             this.spendMana(spell.mana);
             if (spell instanceof DamageSpell) {
+               target.health -= spell.damage;
                this.inflictDamage(spell.damage);
             }
+         return true;
          }
       }
    };
