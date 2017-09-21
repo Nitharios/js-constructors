@@ -97,7 +97,7 @@ function Spell(name, cost, description) {
    */
 
    this.inflictDamage = function(damage){
-      if (this.health - damage <= 0) {
+      if (this.health <= damage) {
          this.health = 0;
          this.isAlive = false;
       } else {
@@ -151,4 +151,17 @@ function Spell(name, cost, description) {
    * @return {boolean}                    Whether the spell was successfully cast.
    */
 
+   this.invoke = function(spell, target) {
+      if (!(spell instanceof Spell) || !(target instanceof Spellcaster)) {
+         return false;
+      } else {
+         if (target.mana < spell.mana) return false;
+         else {
+            this.spendMana(spell.mana);
+            if (spell instanceof DamageSpell) {
+               this.inflictDamage(spell.damage);
+            }
+         }
+      }
+   };
 }
